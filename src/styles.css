@@ -227,7 +227,7 @@ p {
 .desktop-nav > a,
 .desktop-services__trigger,
 .language-switch {
-  --nav-hover-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --nav-hover-ease: var(--ease-out);
   position: relative;
   z-index: 0;
   overflow: hidden;
@@ -235,8 +235,8 @@ p {
   padding: 0.48rem 0.72rem 0.52rem;
   border-radius: var(--radius-pill);
   transition:
-    color 380ms var(--nav-hover-ease),
-    transform 620ms var(--nav-hover-ease);
+    color 320ms var(--nav-hover-ease),
+    transform 480ms var(--nav-hover-ease);
 }
 
 .desktop-nav > a::before,
@@ -249,7 +249,7 @@ p {
   background: var(--nav-fill);
   content: "";
   clip-path: circle(0 at 50% 100%);
-  transition: clip-path 720ms var(--nav-hover-ease);
+  transition: clip-path 320ms var(--nav-hover-ease);
 }
 
 .desktop-nav > a:hover,
