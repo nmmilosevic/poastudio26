@@ -219,9 +219,18 @@ const ui = {
     methodAction: "Understand our approach",
     processTitle: "A clear path from first conversation to built work.",
     process: [
-      ["Initial conversation", "We establish ambitions, constraints and the decisions that matter first."],
-      ["Analysis and direction", "We test feasibility, potential, programme and the technical framework."],
-      ["Architectural proposal", "A coherent concept connects space, use, investment and delivery."],
+      [
+        "Initial conversation",
+        "We begin by understanding how you want to live, what the site or building allows, and which decisions will define the project. Ambition, timing, investment and practical constraints are made clear from the outset.",
+      ],
+      [
+        "Analysis and direction",
+        "We study planning conditions, structure, orientation, programme and cost before fixing a direction. Each possibility is tested for spatial quality, technical feasibility and long-term value.",
+      ],
+      [
+        "Architectural proposal",
+        "The chosen direction becomes a precise architectural proposal connecting layout, light, materials and construction. Drawings, models and visualisations make every decision legible before work begins.",
+      ],
     ],
     studioTitle: "International experience, grounded in place.",
     studioBody:
@@ -273,9 +282,18 @@ const ui = {
     methodAction: "Conocer nuestra forma de trabajar",
     processTitle: "Un recorrido claro desde la primera conversación hasta la obra.",
     process: [
-      ["Conversación inicial", "Definimos objetivos, condicionantes y las decisiones que deben resolverse primero."],
-      ["Análisis y dirección", "Comprobamos viabilidad, potencial, programa y marco técnico."],
-      ["Propuesta arquitectónica", "Un concepto coherente conecta espacio, uso, inversión y ejecución."],
+      [
+        "Conversación inicial",
+        "Empezamos por comprender cómo quieres habitar, qué permite el lugar o el edificio y qué decisiones definirán el proyecto. Objetivos, plazos, inversión y condicionantes prácticos quedan claros desde el inicio.",
+      ],
+      [
+        "Análisis y dirección",
+        "Estudiamos normativa, estructura, orientación, programa y costes antes de fijar una dirección. Cada posibilidad se contrasta por su calidad espacial, viabilidad técnica y valor a largo plazo.",
+      ],
+      [
+        "Propuesta arquitectónica",
+        "La dirección elegida se convierte en una propuesta precisa que conecta distribución, luz, materiales y construcción. Planos, modelos y visualizaciones hacen legible cada decisión antes de comenzar la obra.",
+      ],
     ],
     studioTitle: "Experiencia internacional, arraigada en cada lugar.",
     studioBody:
@@ -940,6 +958,11 @@ function ServiceExperience({ language }) {
             onMouseEnter={() => setActive(index)}
             onFocus={() => setActive(index)}
           >
+            {active === index && (
+              <div className="service-index__mobile-stage" aria-live="polite">
+                <img src={imageFor(service.page)} alt={service.title} loading="eager" />
+              </div>
+            )}
             <button
               className="service-index__trigger"
               type="button"
