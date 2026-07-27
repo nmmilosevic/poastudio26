@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.playwright-cli/
+
+*-deploy.zip
+
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
