@@ -472,6 +472,13 @@ function BrandLogo({ className = "" }) {
   return <span className={`brand-logo ${className}`} aria-hidden="true" />;
 }
 
+function handleHomeLogoClick(event) {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  if (window.location.pathname !== event.currentTarget.pathname) return;
+  event.preventDefault();
+  window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+}
+
 function Header() {
   const language = useLanguage();
   const location = useLocation();
@@ -628,7 +635,12 @@ function Header() {
   return (
     <>
       <m.header className="site-header" style={{ y: navInset, "--nav-inset": navInset }}>
-        <Link className="wordmark" to={homePath(language)} aria-label="POA Estudio">
+        <Link
+          className="wordmark"
+          to={homePath(language)}
+          aria-label="POA Estudio"
+          onClick={handleHomeLogoClick}
+        >
           <BrandLogo />
         </Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
@@ -779,7 +791,12 @@ function Footer() {
         </div>
       </div>
       <div className="footer-base">
-        <Link className="footer-brand" to={homePath(language)} aria-label="POA Estudio">
+        <Link
+          className="footer-brand"
+          to={homePath(language)}
+          aria-label="POA Estudio"
+          onClick={handleHomeLogoClick}
+        >
           <BrandLogo />
         </Link>
         <span>Por Otra Arquitectura</span>
