@@ -955,6 +955,7 @@ main {
 }
 
 .process-list p {
+  min-height: calc(7.5em + clamp(1.4rem, 2.5vw, 2.25rem));
   padding-top: clamp(1.4rem, 2.5vw, 2.25rem);
   margin-top: auto;
   margin-bottom: 0;
