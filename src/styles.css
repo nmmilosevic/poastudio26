@@ -881,18 +881,32 @@ main {
   background: var(--paper-bright);
 }
 
-.press-strip > div {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+.press-strip__track {
+  display: flex;
+  width: max-content;
+  animation: press-strip-loop 30s linear infinite;
+  will-change: transform;
+}
+
+.press-strip__set {
+  display: flex;
+  flex: none;
+  align-items: center;
 }
 
 .press-strip img {
-  width: 100%;
+  width: clamp(9rem, 14vw, 13rem);
   height: 8rem;
+  flex: none;
   padding: 0 1rem;
   object-fit: contain;
   filter: grayscale(1) contrast(1.1);
+}
+
+@keyframes press-strip-loop {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 .process-chapter {
@@ -1992,6 +2006,7 @@ main {
 
 @media (max-width: 760px) {
   :root {
+    --framed-edge-gutter: 1.5rem;
     --gutter: 1.1rem;
     --space-chapter: 7rem;
     --type-display: clamp(3.35rem, 15.4vw, 5.4rem);
@@ -2003,6 +2018,7 @@ main {
   .site-header {
     min-height: 4.4rem;
     grid-template-columns: 1fr auto;
+    padding-inline: var(--framed-edge-gutter);
   }
 
   .desktop-nav,
@@ -2065,6 +2081,8 @@ main {
   }
 
   .hero-credit {
+    right: calc(var(--framed-edge-gutter) + var(--hero-frame-inset, 0px));
+    left: calc(var(--framed-edge-gutter) + var(--hero-frame-inset, 0px));
     flex-direction: column;
     gap: 0.15rem;
   }

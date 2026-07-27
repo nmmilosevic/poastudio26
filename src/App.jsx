@@ -989,9 +989,22 @@ function PressStrip({ page }) {
       whileInView="visible"
       viewport={VIEWPORT_ONCE}
     >
-      <div>
-        {logos.map((image, index) => (
-          <img src={image.src} alt={image.alt || "Publication"} loading="lazy" key={`${image.src}-${index}`} />
+      <div className="press-strip__track">
+        {[false, true].map((isDuplicate) => (
+          <div
+            className="press-strip__set"
+            aria-hidden={isDuplicate ? "true" : undefined}
+            key={isDuplicate ? "duplicate" : "primary"}
+          >
+            {logos.map((image, index) => (
+              <img
+                src={image.src}
+                alt={isDuplicate ? "" : image.alt || "Publication"}
+                loading="lazy"
+                key={`${image.src}-${index}`}
+              />
+            ))}
+          </div>
         ))}
       </div>
     </m.section>

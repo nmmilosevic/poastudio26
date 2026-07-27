@@ -159,7 +159,9 @@ export function ScrollHeroFrame({ children }) {
   });
   const clipPath = useTransform(scrollYProgress, (value) => {
     const progress = 1 - heroMorphProgress(value);
-    return `inset(${progress * 24}px round ${progress * 56}px)`;
+    const maximumRadius =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 760px)").matches ? 42 : 56;
+    return `inset(${progress * 24}px round ${progress * maximumRadius}px)`;
   });
   const frameInset = useTransform(
     scrollYProgress,
