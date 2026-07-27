@@ -950,14 +950,6 @@ main {
   font-size: clamp(1.6rem, 2.5vw, 2.8rem);
 }
 
-.process-icon {
-  width: clamp(4.75rem, 6vw, 6.5rem);
-  align-self: center;
-  justify-self: end;
-  color: oklch(0.19 0.008 96 / 38%);
-  vector-effect: non-scaling-stroke;
-}
-
 .process-list p {
   margin-bottom: 0;
   font-size: var(--type-body);

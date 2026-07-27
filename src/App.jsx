@@ -1024,49 +1024,6 @@ function PressStrip({ page }) {
   );
 }
 
-function ProcessIcon({ index }) {
-  const sharedProps = {
-    className: "process-icon",
-    viewBox: "0 0 96 96",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.25",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true",
-  };
-
-  if (index === 0) {
-    return (
-      <svg {...sharedProps}>
-        <circle cx="25" cy="48" r="10" />
-        <circle cx="71" cy="48" r="10" />
-        <path d="M35 48h26M48 35v26" />
-        <path d="M17 30c8-7 18-10 31-10s23 3 31 10M17 66c8 7 18 10 31 10s23-3 31-10" />
-      </svg>
-    );
-  }
-
-  if (index === 1) {
-    return (
-      <svg {...sharedProps}>
-        <rect x="18" y="18" width="60" height="60" rx="2" />
-        <path d="M38 18v60M58 18v60M18 38h60M18 58h60" />
-        <circle cx="58" cy="38" r="11" />
-        <path d="m66 46 12 12M30 66l36-36" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg {...sharedProps}>
-      <path d="M18 76V18h60v58H52V52H36v24Z" />
-      <path d="M36 52a16 16 0 0 1 16 16M52 68v8M18 38h22M58 18v20h20" />
-      <circle cx="29" cy="28" r="3" />
-    </svg>
-  );
-}
-
 function HomePage({ language }) {
   const labels = ui[language];
   const pages = pageMaps[language];
@@ -1173,7 +1130,6 @@ function HomePage({ language }) {
                 viewport={VIEWPORT_ONCE}
               >
                 <h3>{title}</h3>
-                <ProcessIcon index={index} />
                 <p>{body}</p>
               </m.article>
             ))}
