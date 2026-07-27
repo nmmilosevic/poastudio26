@@ -9,6 +9,7 @@ import {
   Reveal,
   ScrollHeroFrame,
   ScrollWordReveal,
+  SERVICE_VIEWPORT_ONCE,
   VIEWPORT_ONCE,
   heroImageVariants,
   mediaImageVariants,
@@ -17,7 +18,12 @@ import {
   menuVariants,
   revealVariants,
   routeVariants,
+  serviceContentVariants,
+  serviceHeroImageVariants,
   serviceImageVariants,
+  serviceMediaImageVariants,
+  serviceMediaVariants,
+  serviceSectionVariants,
 } from "./motion-system";
 
 const languages = ["en", "es"];
@@ -441,10 +447,18 @@ function useDocumentTitle(title, language) {
   }, [title, language]);
 }
 
+let pendingLanguageScrollY = null;
+
+function rememberLanguageScroll(event) {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  pendingLanguageScrollY = window.scrollY;
+}
+
 function ScrollManager() {
   const location = useLocation();
   useLayoutEffect(() => {
     window.history.scrollRestoration = "manual";
+    if (pendingLanguageScrollY !== null) return undefined;
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     const frame = window.requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
     return () => {
@@ -635,13 +649,17 @@ function Header() {
               aria-controls="desktop-services-menu"
               onClick={openServices}
               onFocus={openServices}
-          >
+            >
               {labels.services}
             </button>
           </div>
         </nav>
         <div className="header-actions">
-          <Link className="language-switch" to={translatedPath(location.pathname, language)}>
+          <Link
+            className="language-switch"
+            to={translatedPath(location.pathname, language)}
+            onClick={rememberLanguageScroll}
+          >
             {language === "en" ? "ES" : "EN"}
           </Link>
           <Link className="header-contact" to={contactPath(language)}>
@@ -771,19 +789,19 @@ function Footer() {
   );
 }
 
-function AnimatedImage({ image, src, className = "", eager = false, alt = "" }) {
+function AnimatedImage({ image, src, className = "", eager = false, alt = "", streamlined = false }) {
   const imageSrc = src || image?.src;
   if (!imageSrc) return null;
   return (
     <m.figure
       className={`media-frame ${className}`}
-      variants={mediaVariants}
+      variants={streamlined ? serviceMediaVariants : mediaVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={VIEWPORT_ONCE}
+      viewport={streamlined ? SERVICE_VIEWPORT_ONCE : VIEWPORT_ONCE}
     >
       <m.img
-        variants={mediaImageVariants}
+        variants={streamlined ? serviceMediaImageVariants : mediaImageVariants}
         src={imageSrc}
         alt={alt || image?.alt || ""}
         loading={eager ? "eager" : "lazy"}
@@ -828,7 +846,7 @@ function ProjectGrid({ projects, language, all = false }) {
   );
 }
 
-function EditorialSections({ item, skip = 0 }) {
+function EditorialSections({ item, skip = 0, serviceMode = false }) {
   const sections = item?.sections?.slice(skip) || [];
   return (
     <div className="editorial-sections">
@@ -860,24 +878,33 @@ function EditorialSections({ item, skip = 0 }) {
             <m.section
               className="editorial-section editorial-section--faq"
               key={`${item.id}-${sectionIndex}`}
-              variants={revealVariants}
+              variants={serviceMode ? serviceSectionVariants : revealVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={VIEWPORT_ONCE}
+              viewport={serviceMode ? SERVICE_VIEWPORT_ONCE : VIEWPORT_ONCE}
             >
-              <div className="faq-heading">
+              <m.div
+                className="faq-heading"
+                variants={serviceMode ? serviceContentVariants : undefined}
+              >
                 <h2>{blocks[faqHeadingIndex].text}</h2>
-              </div>
-              <div className="faq-list">
+              </m.div>
+              <m.div
+                className="faq-list"
+                variants={serviceMode ? serviceContentVariants : undefined}
+              >
                 {answers.map((block, index) => (
                   <article className="faq-item" key={`${questions[index]}-${index}`}>
                     <h3>{questions[index]}</h3>
                     {block.type === "quote" ? <blockquote>{block.text}</blockquote> : <p>{block.text}</p>}
                   </article>
                 ))}
-              </div>
+              </m.div>
               {closingBlocks.length > 0 && (
-                <div className="faq-closing">
+                <m.div
+                  className="faq-closing"
+                  variants={serviceMode ? serviceContentVariants : undefined}
+                >
                   <div>
                     {closingBlocks
                       .filter((block) => block.type === "heading")
@@ -888,7 +915,7 @@ function EditorialSections({ item, skip = 0 }) {
                       .filter((block) => block.type !== "heading")
                       .map((block, index) => <p key={`${block.text}-${index}`}>{block.text}</p>)}
                   </div>
-                </div>
+                </m.div>
               )}
             </m.section>
           );
@@ -898,20 +925,26 @@ function EditorialSections({ item, skip = 0 }) {
           <m.section
             className="editorial-section"
             key={`${item.id}-${sectionIndex}`}
-            variants={revealVariants}
+            variants={serviceMode ? serviceSectionVariants : revealVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={VIEWPORT_ONCE}
+            viewport={serviceMode ? SERVICE_VIEWPORT_ONCE : VIEWPORT_ONCE}
           >
-            <div className="editorial-copy">
-              <div>
+            <m.div
+              className="editorial-copy"
+              variants={serviceMode ? serviceSectionVariants : undefined}
+            >
+              <m.div variants={serviceMode ? serviceContentVariants : undefined}>
                 {headingBlocks.map((block, index) => {
                   const Element = index === 0 ? "h2" : "h3";
                   return <Element key={`${block.text}-${index}`}>{block.text}</Element>;
                 })}
-              </div>
+              </m.div>
               {bodyBlocks.length > 0 && (
-                <div className="body-copy">
+                <m.div
+                  className="body-copy"
+                  variants={serviceMode ? serviceContentVariants : undefined}
+                >
                   {bodyBlocks.map((block, index) => {
                     if (block.type === "list") {
                       return (
@@ -923,13 +956,17 @@ function EditorialSections({ item, skip = 0 }) {
                     if (block.type === "quote") return <blockquote key={`${block.text}-${index}`}>{block.text}</blockquote>;
                     return <p key={`${block.text}-${index}`}>{block.text}</p>;
                   })}
-                </div>
+                </m.div>
               )}
-            </div>
+            </m.div>
             {images.length > 0 && (
               <div className={`section-media-grid count-${images.length}`}>
                 {images.map((image, index) => (
-                  <AnimatedImage image={image} key={`${image.src}-${index}`} />
+                  <AnimatedImage
+                    image={image}
+                    key={`${image.src}-${index}`}
+                    streamlined={serviceMode}
+                  />
                 ))}
               </div>
             )}
@@ -1197,7 +1234,7 @@ function HomePage({ language }) {
   );
 }
 
-function PageHero({ title, intro, image }) {
+function PageHero({ title, intro, image, serviceMode = false }) {
   return (
     <section className={`page-hero ${image?.src ? "page-hero--media" : ""}`}>
       {image?.src && (
@@ -1205,16 +1242,21 @@ function PageHero({ title, intro, image }) {
           src={image.src}
           alt={image.alt || title}
           fetchpriority="high"
-          variants={heroImageVariants}
+          variants={serviceMode ? serviceHeroImageVariants : heroImageVariants}
           initial="hidden"
           animate="visible"
         />
       )}
       {image?.src && <div className="hero-scrim" />}
       <div className="page-hero__content">
-        <MotionHeading text={cleanText(title)} immediate delay={0.08} />
+        <MotionHeading text={cleanText(title)} immediate delay={serviceMode ? 0.04 : 0.08} />
         {intro && (
-          <m.p variants={revealVariants} custom={0.28} initial="hidden" animate="visible">
+          <m.p
+            variants={serviceMode ? serviceContentVariants : revealVariants}
+            custom={serviceMode ? 0.16 : 0.28}
+            initial="hidden"
+            animate="visible"
+          >
             {cleanText(intro)}
           </m.p>
         )}
@@ -1535,8 +1577,17 @@ function GenericPage({ language, forcedSlug }) {
   };
   return (
     <main className={legalSlugs.includes(slug) ? "legal-page" : isServicePage ? "service-page" : ""}>
-      <PageHero title={conciseTitles[slug] || sourceTitle} intro={legalSlugs.includes(slug) ? "" : primaryText(page)} image={legalSlugs.includes(slug) ? null : page.hero || page.gallery[0]} />
-      <EditorialSections item={page} skip={legalSlugs.includes(slug) ? 0 : 1} />
+      <PageHero
+        title={conciseTitles[slug] || sourceTitle}
+        intro={legalSlugs.includes(slug) ? "" : primaryText(page)}
+        image={legalSlugs.includes(slug) ? null : page.hero || page.gallery[0]}
+        serviceMode={isServicePage}
+      />
+      <EditorialSections
+        item={page}
+        skip={legalSlugs.includes(slug) ? 0 : 1}
+        serviceMode={isServicePage}
+      />
     </main>
   );
 }
@@ -1677,6 +1728,15 @@ function App() {
             initial="hidden"
             animate="visible"
             exit="exit"
+            onAnimationStart={(definition) => {
+              if (definition !== "visible" || pendingLanguageScrollY === null) return;
+              const scrollY = pendingLanguageScrollY;
+              pendingLanguageScrollY = null;
+              window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
+              window.requestAnimationFrame(() => {
+                window.scrollTo({ top: scrollY, left: 0, behavior: "instant" });
+              });
+            }}
           >
             <Routes location={location}>
               <Route path="/" element={<HomePage language="es" />} />

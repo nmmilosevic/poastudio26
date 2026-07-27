@@ -228,25 +228,27 @@ p {
 .desktop-services__trigger,
 .language-switch {
   position: relative;
+  z-index: 0;
+  overflow: hidden;
+  isolation: isolate;
   padding: 0.48rem 0.72rem 0.52rem;
   border-radius: var(--radius-pill);
-  transition: transform 420ms var(--ease-out);
+  transition:
+    color 220ms ease,
+    transform 420ms var(--ease-out);
 }
 
-.desktop-nav > a::after,
-.desktop-services__trigger::after,
-.language-switch::after {
+.desktop-nav > a::before,
+.desktop-services__trigger::before,
+.language-switch::before {
   position: absolute;
-  right: 0.72rem;
-  bottom: 0.28rem;
-  left: 0.72rem;
-  height: 1px;
-  background: currentColor;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--nav-fill);
   content: "";
-  opacity: 0.72;
-  transform: scaleX(0);
-  transform-origin: right center;
-  transition: transform 420ms var(--ease-out);
+  clip-path: circle(0 at 50% 100%);
+  transition: clip-path 520ms var(--ease-out);
 }
 
 .desktop-nav > a:hover,
@@ -256,18 +258,21 @@ p {
 .desktop-services__trigger[aria-expanded="true"],
 .language-switch:hover,
 .language-switch:focus-visible {
+  color: var(--nav-fill-contrast);
   transform: translateY(-1px);
 }
 
-.desktop-nav > a:hover::after,
-.desktop-nav > a:focus-visible::after,
-.desktop-services__trigger:hover::after,
-.desktop-services__trigger:focus-visible::after,
-.desktop-services__trigger[aria-expanded="true"]::after,
-.language-switch:hover::after,
-.language-switch:focus-visible::after {
-  transform: scaleX(1);
-  transform-origin: left center;
+.desktop-nav > a:hover::before,
+.desktop-services__trigger:hover::before,
+.desktop-services__trigger[aria-expanded="true"]::before,
+.language-switch:hover::before {
+  clip-path: circle(160% at 50% 100%);
+}
+
+.desktop-nav > a:focus-visible::before,
+.desktop-services__trigger:focus-visible::before,
+.language-switch:focus-visible::before {
+  clip-path: circle(160% at 50% 100%);
 }
 
 .desktop-services {
@@ -1442,6 +1447,10 @@ main {
   height: 100%;
   object-fit: cover;
   transition: transform 850ms var(--ease-out);
+}
+
+.service-page .section-media-grid img {
+  filter: saturate(0.92);
 }
 
 .section-media-grid .media-frame:hover img {

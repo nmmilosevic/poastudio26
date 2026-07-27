@@ -23,6 +23,12 @@ export const VIEWPORT_ONCE = Object.freeze({
   margin: "0px 0px -8% 0px",
 });
 
+export const SERVICE_VIEWPORT_ONCE = Object.freeze({
+  once: true,
+  amount: 0.08,
+  margin: "0px 0px -4% 0px",
+});
+
 export const routeVariants = {
   hidden: { opacity: 0, y: 14 },
   visible: {
@@ -44,6 +50,56 @@ export const revealVariants = {
     y: 0,
     transition: { type: "tween", duration: MOTION.duration.enter, delay, ease: MOTION.ease },
   }),
+};
+
+export const serviceSectionVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.025,
+      staggerChildren: 0.075,
+    },
+  },
+};
+
+export const serviceContentVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "tween",
+      duration: 0.48,
+      delay,
+      ease: MOTION.ease,
+    },
+  }),
+};
+
+export const serviceMediaVariants = {
+  hidden: { opacity: 0, y: 12, scale: 0.996 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "tween",
+      duration: 0.58,
+      ease: MOTION.ease,
+    },
+  },
+};
+
+export const serviceMediaImageVariants = {
+  hidden: { scale: 1.014 },
+  visible: {
+    scale: 1,
+    transition: {
+      type: "tween",
+      duration: 0.72,
+      ease: MOTION.ease,
+    },
+  },
 };
 
 export const mediaVariants = {
@@ -72,6 +128,19 @@ export const heroImageVariants = {
     scale: 1,
     filter: "saturate(0.82)",
     transition: { type: "tween", duration: MOTION.duration.signature, ease: MOTION.ease },
+  },
+};
+
+export const serviceHeroImageVariants = {
+  hidden: { opacity: 0, scale: 1.018 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "tween",
+      duration: 0.78,
+      ease: MOTION.ease,
+    },
   },
 };
 
