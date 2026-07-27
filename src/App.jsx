@@ -617,11 +617,10 @@ function Header() {
               aria-controls="desktop-services-menu"
               onClick={openServices}
               onFocus={openServices}
-            >
+          >
               {labels.services}
             </button>
           </div>
-          <Link to={journalPath(language)}>{labels.journal}</Link>
         </nav>
         <div className="header-actions">
           <Link className="language-switch" to={translatedPath(location.pathname, language)}>
@@ -689,9 +688,6 @@ function Header() {
                     </Link>
                   ))}
                 </div>
-              </m.div>
-              <m.div className="menu-overlay__item" variants={menuItemVariants}>
-                <Link to={journalPath(language)}>{labels.journal}</Link>
               </m.div>
               <m.div className="menu-overlay__item" variants={menuItemVariants}>
                 <Link to={contactPath(language)}>{labels.contact}</Link>
@@ -938,21 +934,38 @@ function ServiceExperience({ language }) {
     <div className="service-index">
       <div className="service-index__list">
         {services.map((service, index) => (
-          <Link
-            className={active === index ? "is-active" : ""}
-            to={pagePath(language, service.slug)}
+          <div
+            className={`service-index__item${active === index ? " is-active" : ""}`}
             key={service.slug}
             onMouseEnter={() => setActive(index)}
             onFocus={() => setActive(index)}
           >
-            <h3>{service.title}</h3>
-            <div className="service-index__detail">
+            <button
+              className="service-index__trigger"
+              type="button"
+              aria-expanded={active === index}
+              aria-controls={`service-detail-${language}-${index}`}
+              onClick={() => setActive(index)}
+            >
+              <h3>{service.title}</h3>
+            </button>
+            <div
+              className="service-index__detail"
+              id={`service-detail-${language}-${index}`}
+              aria-hidden={active !== index}
+            >
               <div>
                 <p>{service.description}</p>
-                <span>{labels.serviceAction}</span>
+                <Link
+                  className="service-index__action"
+                  to={pagePath(language, service.slug)}
+                  tabIndex={active === index ? 0 : -1}
+                >
+                  {labels.serviceAction}
+                </Link>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
       <div className="service-index__stage" aria-live="polite">
@@ -1008,6 +1021,49 @@ function PressStrip({ page }) {
         ))}
       </div>
     </m.section>
+  );
+}
+
+function ProcessIcon({ index }) {
+  const sharedProps = {
+    className: "process-icon",
+    viewBox: "0 0 96 96",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.25",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true",
+  };
+
+  if (index === 0) {
+    return (
+      <svg {...sharedProps}>
+        <circle cx="25" cy="48" r="10" />
+        <circle cx="71" cy="48" r="10" />
+        <path d="M35 48h26M48 35v26" />
+        <path d="M17 30c8-7 18-10 31-10s23 3 31 10M17 66c8 7 18 10 31 10s23-3 31-10" />
+      </svg>
+    );
+  }
+
+  if (index === 1) {
+    return (
+      <svg {...sharedProps}>
+        <rect x="18" y="18" width="60" height="60" rx="2" />
+        <path d="M38 18v60M58 18v60M18 38h60M18 58h60" />
+        <circle cx="58" cy="38" r="11" />
+        <path d="m66 46 12 12M30 66l36-36" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg {...sharedProps}>
+      <path d="M18 76V18h60v58H52V52H36v24Z" />
+      <path d="M36 52a16 16 0 0 1 16 16M52 68v8M18 38h22M58 18v20h20" />
+      <circle cx="29" cy="28" r="3" />
+    </svg>
   );
 }
 
@@ -1117,6 +1173,7 @@ function HomePage({ language }) {
                 viewport={VIEWPORT_ONCE}
               >
                 <h3>{title}</h3>
+                <ProcessIcon index={index} />
                 <p>{body}</p>
               </m.article>
             ))}
@@ -1549,14 +1606,7 @@ function ArticleSections({ item }) {
         if (!blocks.length && !images.length) return null;
 
         return (
-          <m.section
-            className="article-section"
-            key={`${item.id}-${sectionIndex}`}
-            variants={revealVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={VIEWPORT_ONCE}
-          >
+          <section className="article-section" key={`${item.id}-${sectionIndex}`}>
             {blocks.length > 0 && (
               <div className="article-prose">
                 {blocks.map((block, index) => {
@@ -1580,7 +1630,7 @@ function ArticleSections({ item }) {
                 ))}
               </div>
             )}
-          </m.section>
+          </section>
         );
       })}
     </div>

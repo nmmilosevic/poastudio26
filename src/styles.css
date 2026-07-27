@@ -732,7 +732,7 @@ main {
   flex-direction: column;
 }
 
-.service-index__list > a {
+.service-index__item {
   display: grid;
   flex: 1;
   align-content: center;
@@ -744,13 +744,23 @@ main {
     background 450ms ease;
 }
 
-.service-index__list > a:last-child {
+.service-index__item:last-child {
   border-bottom: 0;
 }
 
-.service-index__list > a.is-active {
+.service-index__item.is-active {
   color: var(--ink);
   background: var(--paper-deep);
+}
+
+.service-index__trigger {
+  width: 100%;
+  padding: 0;
+  color: inherit;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
 }
 
 .service-index__list h3 {
@@ -782,7 +792,7 @@ main {
   line-height: 1.5;
 }
 
-.service-index__detail span {
+.service-index__action {
   display: inline-flex;
   width: fit-content;
   align-items: center;
@@ -795,7 +805,7 @@ main {
   line-height: 1.2;
 }
 
-.service-index__list > a.is-active .service-index__detail {
+.service-index__item.is-active .service-index__detail {
   grid-template-rows: 1fr;
   opacity: 1;
 }
@@ -926,15 +936,26 @@ main {
 }
 
 .process-list article {
+  display: grid;
   min-height: 22rem;
+  grid-template-rows: auto 1fr auto;
   padding: clamp(1.5rem, 3vw, 3rem);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
+  background: var(--paper-bright);
 }
 
 .process-list h3 {
-  margin-bottom: clamp(6rem, 11vw, 10rem);
+  margin-bottom: 0;
   font-size: clamp(1.6rem, 2.5vw, 2.8rem);
+}
+
+.process-icon {
+  width: clamp(4.75rem, 6vw, 6.5rem);
+  align-self: center;
+  justify-self: end;
+  color: oklch(0.19 0.008 96 / 38%);
+  vector-effect: non-scaling-stroke;
 }
 
 .process-list p {
@@ -2113,12 +2134,19 @@ main {
     grid-row: 2;
   }
 
-  .service-index__list > a {
+  .service-index__item {
+    flex: none;
     min-height: 7.6rem;
+    padding-block: 1.4rem;
   }
 
-  .service-index__list > a.is-active {
-    min-height: 13rem;
+  .service-index__item.is-active {
+    min-height: 0;
+    padding-block: 1.6rem;
+  }
+
+  .service-index__detail > div {
+    padding-bottom: 0.2rem;
   }
 
   .service-index__list h3 {
